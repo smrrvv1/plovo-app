@@ -1,0 +1,15 @@
+.details {
+    padding: 22px;
+    border: 1px solid rgb(231, 231, 231);
+    border-radius: 8px;
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  .buttons {
+    display: flex;
+    gap: 18px;
+    margin-top: 22px;
+  }
