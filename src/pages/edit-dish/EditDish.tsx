@@ -4,6 +4,7 @@ import { axiosApi } from "../../axiosApi";
 import { IDishShort } from "../../types";
 import DishForm from "../../components/dish-form/DishForm";
 import { CircularProgress, Typography } from "@mui/material";
+import styles from "./styles.module.css";
 
 export const EditDish = () => {
   const { id } = useParams()
@@ -12,24 +13,28 @@ export const EditDish = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    axiosApi.get<IDishShort>(`/dishes/${id}.json`).then(res => setDish(res.data))
+    const fetchDish = async () => {
+      const response = await axiosApi.get<IDishShort>(`/dishes/${id}.json`)
+      setDish(response.data)
+    }
+    fetchDish()
   }, [id])
 
-  const onEdit = async (updatedDish: IDishShort) => {
+  const onEditSubmit = async (dishData: IDishShort) => {
     setLoading(true)
     try {
-      await axiosApi.put(`/dishes/${id}.json`, updatedDish)
-      navigate("/")
+      await axiosApi.put(`/dishes/${id}.json`, dishData)
+      navigate('/')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div>
-      <Typography variant="h4" sx={{ mb: 3 }} align="center">Edit Dish</Typography>
+    <div className={styles.container}>
+      <Typography variant="h4" className={styles.title}>Edit Dish</Typography>
       {dish ? (
-        <DishForm onSubmit={onEdit} loading={loading} initialData={dish} />
+        <DishForm onSubmit={onEditSubmit} loading={loading} initialData={dish} />
       ) : (
         <CircularProgress />
       )}
