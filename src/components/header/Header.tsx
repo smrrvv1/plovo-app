@@ -7,7 +7,12 @@ import IconButton from '@mui/material/IconButton';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import { useNavigate } from 'react-router';
 
-export const Header = () => {
+interface Props {
+  totalCount: number
+  totalPrice: number
+}
+
+export const Header = ({ totalCount, totalPrice }: Props) => {
     const navigate = useNavigate()
 
     const goHome = () => {
@@ -17,6 +22,12 @@ export const Header = () => {
     const goAddDish = () => {
         navigate('/dish/create')
     }
+
+    const goToBasket = () => {
+
+      navigate('/basket')
+
+  }
 
     return(
     <Box sx={{ flexGrow: 1 }}>
@@ -32,12 +43,38 @@ export const Header = () => {
           >
             <FastfoodIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography 
+          variant="h6" 
+          component="div" 
+          sx={{ flexGrow: 1 }}>
             Plovo
           </Typography>
+
+          <div style={{
+          display:'flex',
+          alignItems:'center',
+          gap: '8px',
+          }}>
+            <div style={{
+            display:'flex',
+            alignItems:'center',
+            gap: '8px',
+            }}>
+            <Typography>
+            total price: {totalPrice}$
+            </Typography>
+            <Typography>
+            total price: {totalCount}
+            </Typography>
+            </div>
+            <Button>
+            basket
+            </Button>
+
           <Button color="inherit" onClick={goAddDish}>
             Add Dish
             </Button>
+            </div>
         </Toolbar>
       </AppBar>
     </Box>

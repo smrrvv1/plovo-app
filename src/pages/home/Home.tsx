@@ -5,7 +5,11 @@ import { DishCard } from '../../components/dish-card/DishCard.tsx';
 import styles from './styles.module.css'
 import { Typography } from '@mui/material';
 
-export const Home = () => {
+interface Props {
+  addDishToBasket: (dish: IDish) => void
+}
+
+export const Home = ({ addDishToBasket }: Props) => {
   const [dishes, setDishes] = useState<IDish[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -44,7 +48,11 @@ export const Home = () => {
         </Typography>
         <div className={styles.wrapper}>
             {dishes.map((dishItem)=>(
-                <DishCard dish={dishItem} key={dishItem.id} />
+                <DishCard 
+                dish={dishItem} 
+                key={dishItem.id}
+                addDishToBasket={addDishToBasket}
+                 />
             ))}
         </div>
     </div>

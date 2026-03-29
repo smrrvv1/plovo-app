@@ -6,7 +6,7 @@ import { Button, Typography, CircularProgress } from "@mui/material";
 import styles from "./styles.module.css"
 
 export const Dish = () => {
-  const { id } = useParams()
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [dish, setDish] = useState<IDishShort | null>(null)
   const [loading, setLoading] = useState(false)
@@ -22,8 +22,10 @@ export const Dish = () => {
   }, [id])
 
   useEffect(() => {
-    fetchDish()
-  }, [fetchDish])
+    if (id) {
+      fetchDish();
+    }
+  }, [fetchDish, id])
 
   const onDelete = async () => {
     setLoading(true)

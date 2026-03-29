@@ -4,16 +4,18 @@ import CardContent from '@mui/material/CardContent';
 import type { IDish } from '../../types';
 import { Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 interface Props {
-    dish: IDish
-}
+    dish: IDish;
+    addDishToBasket: (dish: IDish) => void
+  }
 
-export const DishCard = ({dish}:Props) => {
+export const DishCard = ({ dish, addDishToBasket }: Props) => {
     const navigate = useNavigate()
 
-    const goToDishPage = (id: string) => {
-        navigate(`/dish/${id}`)
+    const handleAddDishToBasket = (dish:IDish) => {
+        addDishToBasket(dish)
     }
 
     return(
@@ -27,8 +29,14 @@ export const DishCard = ({dish}:Props) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button onClick={()=> goToDishPage(dish.id)}>
-                    Show more
+                <Button onClick={()=> navigate(`/dish/${dish.id}`)}>
+                    Show more   
+                </Button>
+
+                <Button 
+                onClick={() => handleAddDishToBasket(dish)}
+                endIcon={<AddShoppingCartIcon/>}>
+                    Add to basket
                 </Button>
             </CardActions>
         </Card>
