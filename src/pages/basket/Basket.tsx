@@ -1,8 +1,9 @@
 import type { IBasketState } from "../../types"
-import { Typography, Button, TextField, Paper, Box, Container } from "@mui/material";
+import { Typography, Button, TextField, Paper, Box, Container, Divider } from "@mui/material";
 import { axiosApi } from "../../axiosApi"
 import { useState, type FormEvent } from "react"
 import { useNavigate } from 'react-router'
+import { BasketOrderForm } from "./BasketOrderForm"
 
 interface Props{
     basketState: IBasketState
@@ -15,71 +16,62 @@ export const Basket = ({basketState, onIncrease, onDecrease, onClear}:Props) => 
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
 
-    const [customer, setCustomer] = useState({ name: '', address: '' })
-
     const {items, totalPrice} = basketState
 
-    if (items.length === 0){
-        return(
-            <Container sx={{ textAlign: 'center', mt: 5 }}>
-                <Typography variant="h5" align="center">
-                    your basket is empty!
-                </Typography>
-                <Button onClick={() => navigate('/')}>
-                    go to menu
-                </Button>
-            </Container>
+    if (items.length === 0) {
+        return (
+          <Container sx={{ textAlign: 'center', mt: 5 }}>
+            <Typography variant="h5">your basket is empty!</Typography>
+            <Button onClick={() => navigate('/')}>go to menu</Button>
+          </Container>
         )
-    }
+      }
 
-    const handleOrderSubmit = async (e: FormEvent) => {
-        e.preventDefault()
-
-        if (!customer.name || !customer.address) {
-            return alert("fill delivery info!")
-        }
-
+      const handlePlaceOrder = async (customerData: { name: string; address: string; phone: string }) => {
         setLoading(true)
         try {
-        const order = {
+          const order = {
             items: items,
-            customer: customer,
+            customer: customerData,
             totalPrice: totalPrice,
+            totalCount: totalCount,
+          }
+
+          await axiosApi.post('/orders.json', order)
+            onClear();
+            alert("заказ оформлен!")
+            navigate('/')
+            } catch (e) {
+            alert("jшибка при оформлении заказа")
+            } finally {
+            setLoading(false)
+            }
         }
 
-      await axiosApi.post('/orders.json', order)
-      onClear()
-      alert("oorder placed successfully!")
-      navigate('/')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
-    <Box>
-      <Typography 
-      variant="h4" 
-      sx={{ mb: 3 }}>
-        Basket
+    <Container maxWidth="sm">
+        <Typography 
+        variant="h4" 
+        align="center" 
+        sx={{ my: 3 }}>
+            Корзина
         </Typography>
+    <Box>
       
       <Paper sx={{ p: 2, mb: 3 }}>
-        {items.map((item) => (
+        {items.map((item, index) => (
           <Box 
           key={item.dish.id} 
           sx={{ display: 'flex', 
           alignItems: 'center', 
-          mb: 2, 
-          borderBottom: '1px solid #eee', 
-          pb: 1 }}>
+          mb: 2}}>
             <Typography 
             sx={{ flexGrow: 1 }}>
-                {item.dish.name} (x{item.count})
+                {index + 1}.{item.dish.name}
             </Typography>
             <Typography 
             sx={{ mx: 2 }}>
-                {item.dish.price * item.count} $
+                кол-во: {item.count} 
             </Typography>
             
             <Button 
@@ -97,47 +89,21 @@ export const Basket = ({basketState, onIncrease, onDecrease, onClear}:Props) => 
             </Button>
           </Box>
         ))}
-        <Typography 
-        variant="h6" 
-        align="right">
-            Total: {totalPrice} $
+
+        <Divider sx={{ my: 2 }} />
+
+        <Typography>
+            total count: <strong>{totalCount} </strong>
+        </Typography>
+        <Typography>
+            total sum: <strong>{totalPrice} $ </strong>
         </Typography>
       </Paper>
 
       <Paper sx={{ p: 3 }}>
-        <Typography 
-        variant="h6" 
-        sx={{ mb: 2 }}>
-            Delivery Details
-        </Typography>
-        <form onSubmit={handleOrderSubmit}>
-          <TextField
-            fullWidth 
-            label="Name" 
-            required
-            sx={{ mb: 2 }}
-            value={customer.name}
-            onChange={(e) => setCustomer({...customer, name: e.target.value})}
-          />
-          <TextField
-            fullWidth 
-            label="Address" 
-            required
-            sx={{ mb: 2 }}
-            value={customer.address}
-            onChange={(e) => setCustomer({...customer, address: e.target.value})}
-          />
-          <Button 
-            fullWidth 
-            variant="contained" 
-            color="success" 
-            type="submit" 
-            disabled={loading}
-          >
-            {loading ? "sending..." : "order now"}
-          </Button>
-        </form>
+      <BasketOrderForm onSubmit={handlePlaceOrder} loading={loading} />
       </Paper>
     </Box>
+    </Container>
   )
 }
