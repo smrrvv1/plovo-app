@@ -24,9 +24,7 @@ export const Header = ({ totalCount, totalPrice }: Props) => {
     }
 
     const goToBasket = () => {
-
       navigate('/basket')
-
   }
 
     return(
@@ -46,7 +44,10 @@ export const Header = ({ totalCount, totalPrice }: Props) => {
           <Typography 
           variant="h6" 
           component="div" 
-          sx={{ flexGrow: 1 }}>
+          sx={{ flexGrow: 1 }}
+          onClick={goHome}
+          style={{cursor: 'pointer'}}
+          >
             Plovo
           </Typography>
 
@@ -64,10 +65,13 @@ export const Header = ({ totalCount, totalPrice }: Props) => {
             total price: {totalPrice}$
             </Typography>
             <Typography>
-            total price: {totalCount}
+            total count: {totalCount}
             </Typography>
             </div>
-            <Button>
+            <Button 
+            color="inherit" 
+            onClick={goToBasket} 
+            variant="outlined">
             basket
             </Button>
 

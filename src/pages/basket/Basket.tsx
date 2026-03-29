@@ -1,7 +1,7 @@
 import type { IBasketState } from "../../types"
 import { Typography, Button, TextField, Paper, Box, Container, Divider } from "@mui/material";
 import { axiosApi } from "../../axiosApi"
-import { useState, type FormEvent } from "react"
+import { useState} from "react"
 import { useNavigate } from 'react-router'
 import { BasketOrderForm } from "./BasketOrderForm"
 
@@ -16,7 +16,7 @@ export const Basket = ({basketState, onIncrease, onDecrease, onClear}:Props) => 
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
 
-    const {items, totalPrice} = basketState
+    const {items, totalPrice, totalCount} = basketState
 
     if (items.length === 0) {
         return (
@@ -93,7 +93,7 @@ export const Basket = ({basketState, onIncrease, onDecrease, onClear}:Props) => 
         <Divider sx={{ my: 2 }} />
 
         <Typography>
-            total count: <strong>{totalCount} </strong>
+            total count: <strong>{totalCount}</strong>
         </Typography>
         <Typography>
             total sum: <strong>{totalPrice} $ </strong>
@@ -101,7 +101,7 @@ export const Basket = ({basketState, onIncrease, onDecrease, onClear}:Props) => 
       </Paper>
 
       <Paper sx={{ p: 3 }}>
-      <BasketOrderForm onSubmit={handlePlaceOrder} loading={loading} />
+        <BasketOrderForm onSubmit={handlePlaceOrder} loading={loading} />
       </Paper>
     </Box>
     </Container>

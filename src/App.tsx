@@ -40,7 +40,9 @@ function App() {
               basketState={basket} 
               onIncrease={handleIncrease} 
               onDecrease={handleDecrease}
-              onClear={handleClearBasket} />} />
+              onClear={handleClearBasket} 
+              />
+              } />
       </Routes>
     </Container>
     </>
