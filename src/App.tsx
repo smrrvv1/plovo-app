@@ -7,7 +7,7 @@ import { AddDish } from './pages/add-dish/AddDish'
 import { Container } from '@mui/material'
 import { EditDish } from './pages/edit-dish/EditDish'
 import { Basket } from './pages/basket/Basket'
-import { addDishToBasket } from './utils/basketHelpers';
+import { addDishToBasket, decreaseDishCount, increaseDishCount } from './utils/basketHelpers';
 import type { IBasketState, IDish } from './types';
 import { useState } from 'react'
 
@@ -22,6 +22,10 @@ function App() {
     setBasket(prev => addDishToBasket(prev, dish));
   }
 
+  const handleIncrease = (id: string) => setBasket(prev => increaseDishCount(prev, id))
+  const handleDecrease = (id: string) => setBasket(prev => decreaseDishCount(prev, id))
+  const handleClearBasket = () => setBasket({ items: [], totalCount: 0, totalPrice: 0 })
+
   return (
     <>
     <Header totalCount={basket.totalCount} totalPrice={basket.totalPrice} />
@@ -31,7 +35,12 @@ function App() {
         <Route path='/dish/:id' element={<Dish/>}/>
         <Route path='/dish/create' element={<AddDish/>}/>
         <Route path='/dish/edit/:id' element={<EditDish/>}/>
-        <Route path='/basket' element={<Basket basketState={basket} />} />
+        <Route path='/basket' element={
+            <Basket 
+              basketState={basket} 
+              onIncrease={handleIncrease} 
+              onDecrease={handleDecrease}
+              onClear={handleClearBasket} />} />
       </Routes>
     </Container>
     </>
