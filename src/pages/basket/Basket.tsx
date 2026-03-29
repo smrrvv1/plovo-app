@@ -1,10 +1,8 @@
-import { Typography } from "@mui/material"
 import type { IBasketState } from "../../types"
-import { Box, Paper, TextField } from "@mui/material"
-import { Container } from "@mui/material"
-import { Button } from "../../../node_modules/@mui/material/index"
+import { Typography, Button, TextField, Paper, Box, Container } from "@mui/material";
 import { axiosApi } from "../../axiosApi"
-import { Form } from "../../../node_modules/react-router/dist/development/index"
+import { useState, type FormEvent } from "react"
+import { useNavigate } from 'react-router'
 
 interface Props{
     basketState: IBasketState
@@ -112,7 +110,7 @@ export const Basket = ({basketState, onIncrease, onDecrease, onClear}:Props) => 
         sx={{ mb: 2 }}>
             Delivery Details
         </Typography>
-        <Form onSubmit={handleOrderSubmit}>
+        <form onSubmit={handleOrderSubmit}>
           <TextField
             fullWidth 
             label="Name" 
